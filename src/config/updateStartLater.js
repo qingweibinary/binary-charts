@@ -24,7 +24,15 @@ export default (chart: Chart, startLaterEpoch: number, lastData: Object) => {
                 xAxis.setExtremes(min, startLaterDate);
             }
         } else {
-            chart.addSeries(createHiddenSeries([[startLaterDate, lastTick]], 'future'));
+            const lastDataX = lastData.epoch * 1000;
+            const tenArray = Array.apply(null, Array(10)).map(() => 0);
+            const interval = (startLaterDate - lastDataX) / 10;
+            const futureSeriesData = tenArray.map((v, idx) => {
+                const addition = interval * (idx + 1);
+                return [lastDataX + addition, lastTick];
+            });
+
+            chart.addSeries(createHiddenSeries(futureSeriesData, 'future'));
             xAxis.setExtremes(min, startLaterDate);
         }
     }
