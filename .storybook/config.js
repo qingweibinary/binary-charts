@@ -11,6 +11,7 @@ configure(() => {
     require('./open-contracts');
     require('./indicators');
     require('./plotlines');
+    require('./start-later');
     require('./ohlc');
     require('./extremes');
     require('./dynamicTypeChange');

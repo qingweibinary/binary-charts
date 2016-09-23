@@ -1,7 +1,7 @@
 // $FlowFixMe
 import shallowEqual from 'fbjs/lib/shallowEqual';
 import { areTickArraysEqual, areCandleArrayEqual,
-    getLastTickQuote, getLastOHLCTick } from 'binary-utils';
+    getLastTickQuote, getLastOHLCTick, getLast } from 'binary-utils';
 import updateSeries from './updateSeries';
 import updateContract from './updateContract';
 import updateStartLater from './updateStartLater';
@@ -79,7 +79,7 @@ export default (chart: Chart, prevProps: Object, nextProps: Object) => {
     }
 
     if (mergedContract) {
-        updateStartLater(chart, mergedContract.date_start, lastTick);
+        updateStartLater(chart, mergedContract.date_start, getLast(ticks));
     }
 
     if (contractsDiffer || ticksDiffer) {
