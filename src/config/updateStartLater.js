@@ -1,9 +1,10 @@
-import { getLast, nowAsEpoch } from 'binary-utils';
+import { getLast } from 'binary-utils';
 import createHiddenSeries from './createHiddenSeries';
 import getMainSeries from '../utils/getMainSeries';
 
-export default (chart: Chart, startLaterEpoch: number, lastTick: number) => {
-    if (startLaterEpoch <= nowAsEpoch()) {
+export default (chart: Chart, startLaterEpoch: number, lastData: Object) => {
+    const lastTick = Object.keys(lastData).length === 2 ? lastData.quote : lastData.close;
+    if (startLaterEpoch <= lastData.epoch) {
         return;
     }
 
