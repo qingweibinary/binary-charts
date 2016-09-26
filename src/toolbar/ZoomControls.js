@@ -28,8 +28,8 @@ export default class ZoomControls extends PureComponent {
         const futureSeries = chart.get('future');
         const futureX = futureSeries && futureSeries.options.data[0][0];
 
-        const frameSize = max - min;
-        let step = frameSize / 5 * direction;
+        const defaultFrameSize = max - min;
+        const defaultStep = defaultFrameSize / 5 * direction;
 
         const forward = direction > 0;
 
@@ -46,8 +46,8 @@ export default class ZoomControls extends PureComponent {
                 return;
             }
 
-            const expectedNextMax = Math.min(dataMax, max + step);
-            const expectedNextMin = expectedNextMax - frameSize;
+            const expectedNextMax = Math.min(dataMax, max + defaultStep);
+            const expectedNextMin = expectedNextMax - defaultFrameSize;
             const nextFrameHasFutureData = expectedNextMax > seriesLastData[0];
 
             if (nextFrameHasFutureData) {
@@ -60,7 +60,7 @@ export default class ZoomControls extends PureComponent {
                 end = expectedNextMax;
             }
         } else {
-            let requestedMin = min + step;
+            let requestedMin = min + defaultStep;
 
             if (currentFrameHasFutureData) {
                 const frameSizeWithoutFuture = seriesLastData[0] - min;
@@ -74,14 +74,12 @@ export default class ZoomControls extends PureComponent {
                     start = Math.max(requestedMin, dataMin);
                     end = start + frameSizeWithoutFuture;
                 }
+            } else if (requestedMin < dataMin) {
+                start = min;
+                end = max;
             } else {
-                if (requestedMin < dataMin) {
-                    start = min;
-                    end = max;
-                } else {
-                    start = Math.max(dataMin, requestedMin);
-                    end = start + frameSize;
-                }
+                start = Math.max(dataMin, requestedMin);
+                end = start + defaultFrameSize;
             }
 
             if (requestedMin < dataMin) {
